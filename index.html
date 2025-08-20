@@ -1,49 +1,560 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sneaker Color Game</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SNEAKERHEAD</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<!-- Adobe Fonts: Replace xxxxx with your project ID -->
-<link rel="stylesheet" href="https://use.typekit.net/xxxxx.css">
+        body {
+            font-family: 'Bebas Neue', cursive;
+            background-color: #f2f2ea;
+            height: 100vh;
+            overflow: hidden;
+        }
 
-<link rel="stylesheet" href="style.css">
+        .container {
+            display: flex;
+            height: 100vh;
+            position: relative;
+        }
+
+        /* Left side with sneaker */
+        .left-section {
+            flex: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* SNEAKERHEAD title */
+        .main-title {
+            position: absolute;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 40px;
+            font-weight: normal;
+            letter-spacing: 6px;
+            color: #333;
+            z-index: 10;
+        }
+
+        /* Large NIKE background */
+        .nike-background {
+            position: absolute;
+            font-size: 360px;
+            font-weight: 900;
+            color: rgba(220, 220, 220, 0.3);
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            pointer-events: none;
+            letter-spacing: 30px;
+        }
+
+        /* Sneaker */
+        .sneaker-wrapper {
+            position: relative;
+            z-index: 5;
+        }
+
+        .sneaker-svg {
+            width: 500px;
+            height: auto;
+            cursor: pointer;
+        }
+
+        .shoe-label {
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 28px;
+            letter-spacing: 8px;
+            color: #888;
+            font-weight: normal;
+        }
+
+        /* Right panel */
+        .right-panel {
+            width: 320px;
+            background: white;
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: -5px 0 20px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Challenge section */
+        .challenge-section {
+            margin-bottom: 25px;
+        }
+
+        .challenge-title-wrapper {
+            margin-bottom: 8px;
+        }
+
+        .challenge-title {
+            font-size: 32px;
+            font-weight: normal;
+            letter-spacing: 1px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .challenge-subtitle {
+            font-size: 11px;
+            color: #999;
+            letter-spacing: 1px;
+            font-weight: normal;
+        }
+
+        .challenge-description {
+            font-size: 10px;
+            color: #666;
+            line-height: 1.3;
+            margin: 20px 0 25px 0;
+            font-weight: normal;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Color grid */
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 25px;
+        }
+
+        .color-swatch {
+            width: 60px;
+            height: 45px;
+            border-radius: 3px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border-color 0.2s ease;
+        }
+
+        .color-swatch:hover,
+        .color-swatch.selected {
+            border-color: #333;
+        }
+
+        /* Score section */
+        .score-section {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .score-text {
+            font-size: 14px;
+            color: #333;
+            letter-spacing: 1px;
+            font-weight: normal;
+        }
+
+        .success-text {
+            font-size: 16px;
+            color: #4CAF50;
+            letter-spacing: 1px;
+            font-weight: normal;
+        }
+
+        /* Buttons */
+        .restart-button {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-family: 'Bebas Neue', cursive;
+            font-size: 14px;
+            letter-spacing: 2px;
+            cursor: pointer;
+            margin-bottom: 15px;
+            border-radius: 2px;
+        }
+
+        .restart-button:hover {
+            background: #555;
+        }
+
+        .casual-text {
+            text-align: center;
+            font-size: 10px;
+            color: #bbb;
+            letter-spacing: 1px;
+            font-weight: normal;
+        }
+
+        /* Free play mode */
+        .freeplay-section {
+            display: none;
+        }
+
+        .color-picker-area {
+            margin: 25px 0;
+        }
+
+        .eyedropper-btn {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-family: 'Bebas Neue', cursive;
+            font-size: 12px;
+            letter-spacing: 1px;
+            cursor: pointer;
+            margin-bottom: 15px;
+            border-radius: 2px;
+        }
+
+        .eyedropper-btn:hover {
+            background: #555;
+        }
+
+        .eyedropper-btn.active {
+            background: #ff6b35;
+        }
+
+        .color-picker {
+            width: 100%;
+            height: 100px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .lets-play-text {
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            letter-spacing: 1px;
+            margin-bottom: 25px;
+        }
+
+        /* Mode toggle (top right corner) */
+        .mode-toggle {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            z-index: 10;
+            display: flex;
+            gap: 10px;
+        }
+
+        .mode-btn {
+            background: transparent;
+            border: 1px solid #ddd;
+            padding: 8px 16px;
+            font-family: 'Bebas Neue', cursive;
+            font-size: 12px;
+            letter-spacing: 1px;
+            cursor: pointer;
+            color: #666;
+            border-radius: 2px;
+        }
+
+        .mode-btn.active {
+            background: #333;
+            color: white;
+            border-color: #333;
+        }
+
+        /* Watermelon colors exactly as shown */
+        .watermelon-1 { background-color: #7FDBDA; } /* Light teal */
+        .watermelon-2 { background-color: #7B9FE0; } /* Light blue */
+        .watermelon-3 { background-color: #90EE90; } /* Light green */
+        .watermelon-4 { background-color: #BFD641; } /* Yellow-green */
+        .watermelon-5 { background-color: #F0E68C; } /* Light yellow */
+        .watermelon-6 { background-color: #FF6B6B; } /* Red */
+        .watermelon-7 { background-color: #333333; } /* Black */
+        .watermelon-8 { background-color: #FFD700; } /* Gold */
+        .watermelon-9 { background-color: #228B22; } /* Green */
+        .watermelon-10 { background-color: #8A2BE2; } /* Purple */
+        .watermelon-11 { background-color: #FF69B4; } /* Pink */
+    </style>
 </head>
 <body>
-<div class="app-container">
+    <div class="container">
+        <!-- Mode toggle buttons -->
+        <div class="mode-toggle">
+            <button class="mode-btn active" data-mode="challenge">WATERMELON</button>
+            <button class="mode-btn" data-mode="freeplay">FREE FOR ALL</button>
+        </div>
 
-    <!-- Header with arrows and colorway name -->
-    <div class="header">
-        <button id="prev" class="arrow-btn">◀</button>
-        <h1 id="colorway-name">WaterMelon</h1>
-        <button id="next" class="arrow-btn">▶</button>
+        <!-- Left section with sneaker -->
+        <div class="left-section">
+            <h1 class="main-title">SNEAKERHEAD</h1>
+            <div class="nike-background">NIKE</div>
+            
+            <div class="sneaker-wrapper">
+                <object class="sneaker-svg" data="sneaker.svg" type="image/svg+xml" id="sneaker-object">
+                    <!-- Fallback if SVG doesn't load -->
+                    <img src="sneaker-fallback.png" alt="Air Max 1 Sneaker" class="sneaker-svg"/>
+                </object>
+                
+                <div class="shoe-label">AIR MAX 1</div>
+            </div>
+        </div>
+
+        <!-- Right panel -->
+        <div class="right-panel">
+            <!-- Challenge mode -->
+            <div id="challenge-mode" class="challenge-section">
+                <div class="challenge-title-wrapper">
+                    <div class="challenge-title">◀ WATERMELON ▶</div>
+                    <div class="challenge-subtitle">RELEASED 2019</div>
+                </div>
+                
+                <div class="challenge-description">
+                    FILL THE SNEAKER WITH THE CORRECT COLOURS<br>
+                    TO MATCH THE FAMOUS COLOURWAY
+                </div>
+                
+                <div class="color-palette">
+                    <div class="color-swatch watermelon-1" data-color="#7FDBDA"></div>
+                    <div class="color-swatch watermelon-2" data-color="#7B9FE0"></div>
+                    <div class="color-swatch watermelon-3" data-color="#90EE90"></div>
+                    <div class="color-swatch watermelon-4" data-color="#BFD641"></div>
+                    <div class="color-swatch watermelon-5" data-color="#F0E68C"></div>
+                    <div class="color-swatch watermelon-6" data-color="#FF6B6B"></div>
+                    <div class="color-swatch watermelon-7" data-color="#333333"></div>
+                    <div class="color-swatch watermelon-8" data-color="#FFD700"></div>
+                    <div class="color-swatch watermelon-9" data-color="#228B22"></div>
+                    <div class="color-swatch watermelon-10" data-color="#8A2BE2"></div>
+                    <div class="color-swatch watermelon-11" data-color="#FF69B4"></div>
+                </div>
+                
+                <div class="score-section">
+                    <div id="score-display" class="score-text">9 OUT OF 18 CORRECT</div>
+                </div>
+            </div>
+
+            <!-- Free play mode -->
+            <div id="freeplay-mode" class="freeplay-section">
+                <div class="challenge-title-wrapper">
+                    <div class="challenge-title">FREE FOR ALL</div>
+                </div>
+                
+                <div class="challenge-description">
+                    FILL THE SNEAKER WITH WHATEVER COLOUR<br>
+                    YOUR HEART DESIRES
+                </div>
+                
+                <div class="color-picker-area">
+                    <button class="eyedropper-btn" id="eyedropper">EYEDROPPER</button>
+                    <input type="color" class="color-picker" id="colorPicker" value="#3498db">
+                </div>
+                
+                <div class="lets-play-text">LET'S PLAY</div>
+            </div>
+            
+            <button class="restart-button" id="restart">RESTART</button>
+            <div class="casual-text">I JUST WANNA COLOUR IN</div>
+        </div>
     </div>
 
-    <!-- Sneaker SVG display -->
-    <div id="sneaker-display" class="sneaker-container"></div>
+    <script>
+        class SneakerheadGame {
+            constructor() {
+                this.currentMode = 'challenge';
+                this.selectedColor = '#7FDBDA';
+                this.eyedropperMode = false;
+                this.userColors = new Map();
+                this.correctColors = {
+                    'sole': '#333333',
+                    'upper': '#F0E68C',
+                    'toecap': '#90EE90', 
+                    'swoosh': '#FF6B6B',
+                    'heel': '#7FDBDA',
+                    'tongue': '#7B9FE0',
+                    'mudguard': '#BFD641'
+                };
+                
+                this.initialize();
+            }
 
-    <!-- Color palette -->
-    <div class="palette-container">
-        <div id="palette" class="palette"></div>
-    </div>
+            initialize() {
+                this.loadSVG();
+                this.bindEventListeners();
+                this.selectColor(this.selectedColor);
+                this.updateScore();
+            }
 
-    <!-- Progress tracker -->
-    <div class="progress-container">
-        <span id="progress">0/0</span>
-    </div>
+            loadSVG() {
+                const sneakerObject = document.getElementById('sneaker-object');
+                sneakerObject.addEventListener('load', () => {
+                    const svgDoc = sneakerObject.contentDocument;
+                    if (svgDoc) {
+                        const fillableParts = svgDoc.querySelectorAll('.fillable-part');
+                        fillableParts.forEach(part => {
+                            part.addEventListener('click', (e) => {
+                                if (this.eyedropperMode) {
+                                    this.pickColor(e.target);
+                                } else {
+                                    this.fillPart(e.target);
+                                }
+                            });
+                        });
+                    }
+                });
+            }
 
-    <!-- Controls -->
-    <div class="controls">
-        <button id="restart">Restart</button>
-        <button id="free-mode">I just wanna colour in</button>
-    </div>
+            bindEventListeners() {
+                // Mode buttons
+                document.querySelectorAll('.mode-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        this.switchMode(e.target.dataset.mode);
+                    });
+                });
 
-    <!-- Feedback message -->
-    <div id="message" class="message"></div>
+                // Color swatches
+                document.querySelectorAll('.color-swatch').forEach(swatch => {
+                    swatch.addEventListener('click', (e) => {
+                        this.selectColor(e.target.dataset.color);
+                    });
+                });
 
-</div>
+                // Color picker
+                document.getElementById('colorPicker').addEventListener('change', (e) => {
+                    this.selectedColor = e.target.value;
+                });
 
-<script src="script.js"></script>
+                // Eyedropper
+                document.getElementById('eyedropper').addEventListener('click', () => {
+                    this.toggleEyedropper();
+                });
+
+                // Sneaker parts
+                document.querySelectorAll('.fillable-part').forEach(part => {
+                    part.addEventListener('click', (e) => {
+                        if (this.eyedropperMode) {
+                            this.pickColor(e.target);
+                        } else {
+                            this.fillPart(e.target);
+                        }
+                    });
+                });
+
+                // Restart button
+                document.getElementById('restart').addEventListener('click', () => {
+                    this.restart();
+                });
+            }
+
+            switchMode(mode) {
+                this.currentMode = mode;
+                
+                document.querySelectorAll('.mode-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.mode === mode);
+                });
+
+                if (mode === 'challenge') {
+                    document.getElementById('challenge-mode').style.display = 'block';
+                    document.getElementById('freeplay-mode').style.display = 'none';
+                } else {
+                    document.getElementById('challenge-mode').style.display = 'none';
+                    document.getElementById('freeplay-mode').style.display = 'block';
+                }
+
+                this.restart();
+            }
+
+            selectColor(color) {
+                this.selectedColor = color;
+                
+                document.querySelectorAll('.color-swatch').forEach(swatch => {
+                    swatch.classList.toggle('selected', swatch.dataset.color === color);
+                });
+            }
+
+            toggleEyedropper() {
+                this.eyedropperMode = !this.eyedropperMode;
+                document.getElementById('eyedropper').classList.toggle('active', this.eyedropperMode);
+            }
+
+            pickColor(element) {
+                const color = element.getAttribute('fill');
+                if (color && color !== 'none') {
+                    this.selectedColor = color;
+                    document.getElementById('colorPicker').value = color;
+                    this.toggleEyedropper();
+                }
+            }
+
+            fillPart(element) {
+                element.setAttribute('fill', this.selectedColor);
+                this.userColors.set(element.id, this.selectedColor);
+                
+                if (this.currentMode === 'challenge') {
+                    this.updateScore();
+                }
+            }
+
+            updateScore() {
+                if (this.currentMode !== 'challenge') return;
+
+                let correctCount = 0;
+                const totalParts = Object.keys(this.correctColors).length;
+
+                for (const [partId, correctColor] of Object.entries(this.correctColors)) {
+                    const userColor = this.userColors.get(partId);
+                    if (userColor && userColor.toLowerCase() === correctColor.toLowerCase()) {
+                        correctCount++;
+                    }
+                }
+
+                const scoreElement = document.getElementById('score-display');
+                if (correctCount === totalParts) {
+                    scoreElement.textContent = 'YOU DID IT! 🎉';
+                    scoreElement.className = 'success-text';
+                } else {
+                    scoreElement.textContent = `${correctCount} OUT OF ${totalParts} CORRECT`;
+                    scoreElement.className = 'score-text';
+                }
+            }
+
+            restart() {
+                // Reset all parts to default colors
+                document.querySelectorAll('.fillable-part').forEach(part => {
+                    const defaultColors = {
+                        'sole': '#e8e8e8',
+                        'upper': '#f5f5f5',
+                        'toecap': '#f5f5f5',
+                        'swoosh': '#ddd',
+                        'heel': '#f5f5f5',
+                        'tongue': '#f5f5f5',
+                        'mudguard': '#f0f0f0'
+                    };
+                    part.setAttribute('fill', defaultColors[part.id] || '#f5f5f5');
+                });
+
+                this.userColors.clear();
+                this.eyedropperMode = false;
+                document.getElementById('eyedropper').classList.remove('active');
+                
+                if (this.currentMode === 'challenge') {
+                    this.updateScore();
+                    this.selectColor('#7FDBDA');
+                }
+            }
+        }
+
+        // Start the game
+        document.addEventListener('DOMContentLoaded', () => {
+            new SneakerheadGame();
+        });
+    </script>
 </body>
 </html>
