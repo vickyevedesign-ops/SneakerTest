@@ -1,0 +1,113 @@
+/* General app container */
+body {
+    font-family: 'Access MN', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #fdf2e9; /* match your XD background */
+    margin: 0;
+}
+
+.app-container {
+    width: 420px;
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Header layout */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.arrow-btn {
+    background: #ffe6e6; /* XD arrow button color */
+    border: none;
+    border-radius: 12px;
+    padding: 5px 15px;
+    font-size: 20px;
+    cursor: pointer;
+    font-family: 'Access MN', sans-serif;
+}
+
+#colorway-name {
+    font-size: 24px;
+    font-weight: 700;
+    text-align: center;
+    flex-grow: 1;
+    color: #333333;
+}
+
+/* Sneaker container */
+.sneaker-container {
+    width: 100%;
+    height: 280px;
+    border: 2px solid #ddd;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    background: #fafafa;
+}
+
+/* Palette container */
+.palette-container {
+    margin-bottom: 15px;
+}
+
+.palette {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.palette button {
+    width: 35px;
+    height: 35px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* Progress tracker */
+.progress-container {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: #555555;
+}
+
+/* Controls */
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 10px;
+}
+
+.controls button {
+    padding: 8px 15px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    background: #ffe6e6;
+    font-weight: 700;
+    font-family: 'Access MN', sans-serif;
+}
+
+/* Message */
+.message {
+    font-size: 18px;
+    color: #28a745;
+    font-weight: bold;
+    min-height: 24px;
+}
